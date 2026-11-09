@@ -64,6 +64,10 @@ The notebook includes:
 8. Supplementary XGBoost comparison
 9. Complete red and white wine model comparison
 
+## Additional Notebooks
+
+- `RF_Regression_vs_Classification.ipynb`: Random Forest regression vs classification, error by quality score, and feature importance of the tuned Random Forest. Uses the same cleaning and split as the main notebook.
+- `Log_Transform_and_Feature_Subsets.ipynb`: log transformation of skewed features, and feature subsets compared with all 11 features.
 
 ## Reading the Outputs
 
