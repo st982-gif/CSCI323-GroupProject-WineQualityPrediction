@@ -68,6 +68,7 @@ The notebook includes:
 
 - `RF_Regression_vs_Classification.ipynb`: Random Forest regression vs classification, error by quality score, and feature importance of the tuned Random Forest. Uses the same cleaning and split as the main notebook.
 - `Log_Transform_and_Feature_Subsets.ipynb`: log transformation of skewed features, and feature subsets compared with all 11 features.
+- `Rare_Wine_Weighting_oversampling.ipynb`: class weighting and oversampling for rare quality scores (3-4 and 8-9) on the four selected models, comparing overall error and rare wine error. Uses the same cleaning, split and tuned models as the main notebook.
 
 ## Reading the Outputs
 
