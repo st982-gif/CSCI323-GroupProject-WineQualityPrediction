@@ -1,95 +1,133 @@
-# Red and White Wine Quality Modelling
+# Wine Quality Modelling and Preprocessing Experiments
 
-CSCI323 Modern AI — Group FT13
-Yong Le, Jiachen, Jing Ting,Jae Hyun, Ian and Sherya.
+**CSCI323 Modern AI — Group FT13**
 
-## Project Overview
+## Overview
 
-This project investigates how well physicochemical measurements can predict wine quality. We train and evaluate regression models separately on red and white wine datasets and compare their performance.
+This project investigates how preprocessing and imbalance-handling strategies affect wine-quality prediction.
 
-Our aim is to understand how different methods, model settings and data characteristics affect predictions, including errors on rare low and high quality scores.
+Using 11 physicochemical measurements, we predict numerical quality scores for red and white wines separately. We compare four models and examine how changes to their inputs and training data affect overall accuracy and predictions for rare quality scores.
 
 ## Dataset
 
-We use the [UCI Wine Quality dataset](https://archive.ics.uci.edu/dataset/186/wine+quality), containing 11 physicochemical input features and a sensory quality score as the target.
+We use the [UCI Wine Quality dataset](https://archive.ics.uci.edu/dataset/186/wine+quality).
 
-| Dataset | Original records | Duplicates removed | Records used | Training | Testing |
+| Dataset | Original records | Duplicates removed | After cleaning | Training | Testing |
 |---|---:|---:|---:|---:|---:|
 | Red wine | 1,599 | 240 | 1,359 | 1,087 | 272 |
 | White wine | 4,898 | 937 | 3,961 | 3,168 | 793 |
 
-Exact duplicate rows are removed before splitting. Red and white wine are processed and modelled separately.
+Exact duplicates are removed before splitting. Each dataset uses a stratified 80/20 train-test split with random seed 42.
 
-## Methods
-
-We compare six main regression methods:
+## Models
 
 - Linear Regression
-- Decision Tree
 - Random Forest
-- Multi-Layer Perceptron (MLP)
-- Gradient Boosting
 - K-Nearest Neighbours (KNN)
+- Multi-Layer Perceptron (MLP)
 
-XGBoost is included as an additional exploratory comparison. Its settings are adapted from the Gradient Boosting search rather than selected through a separate parameter search.
+The main experiments keep previously selected model settings fixed to investigate the effects of preprocessing.
 
-## Experimental Procedure
+## Experiments
 
-- Use an 80/20 train-test split, stratified by quality score, with random seed 42.
-- Keep the same split for all models within each dataset.
-- Evaluate and select configurations using shuffled five-fold cross-validation on training data.
-- Fit scaling for MLP and KNN within training pipelines.
-- Investigate model settings, training-data size and feature selection.
-- Examine errors at individual quality scores and within broader quality groups.
+| Experiment | Models |
+|---|---|
+| Original-distribution reference | All four |
+| No scaling, standard scaling and robust scaling | KNN and MLP |
+| Log transformation of skewed inputs | All four |
+| Selection of 3, 5, 8 or all 11 features | All four |
+| Random oversampling | All four |
+| Soft and full inverse-frequency sample weighting | Linear Regression and Random Forest |
+| Separately tuned regression versus classification | Random Forest |
+| Permutation and impurity feature importance | Random Forest regressor |
 
-Performance is assessed using:
+Preprocessing and feature selection are fitted within training partitions. Oversampling and sample-weight calculation use training observations only. Validation and test distributions remain unchanged.
 
-| Metric | Interpretation | Better |
-|---|---|---|
-| MAE | Average absolute error in quality-score points | Lower |
-| RMSE | Error measure that penalises larger mistakes more strongly | Lower |
-| R² | Performance relative to predicting the mean of the evaluated targets | Higher |
+For MLP, the early-stopping validation set is separated before preprocessing and oversampling.
 
-## Notebook Contents
+## Evaluation
 
-The notebook includes:
+The experiments share the same five-fold cross-validation partitions within each dataset.
 
-1. Exploratory data analysis and cleaning
-2. Dataset splitting and preparation
-3. Baseline model implementations
-4. Cross-validation and baseline comparisons
-5. Hyperparameter and architecture experiments
-6. Training-data sensitivity and feature selection
-7. Marginal-case analysis and feature importance
-8. Supplementary XGBoost comparison
-9. Complete red and white wine model comparison
+We report:
 
-## Additional Notebooks
+- Overall MAE, RMSE and R².
+- Macro MAE: the equally weighted mean of per-score MAEs.
+- MAE and sample count at each quality score.
+- Rare-score MAE for scores ≤4 or ≥8.
+- Typical-score MAE for scores 5–6, with score 7 reported separately.
 
-- `RF_Regression_vs_Classification.ipynb`: Random Forest regression vs classification, error by quality score, and feature importance of the tuned Random Forest. Uses the same cleaning and split as the main notebook.
-- `Log_Transform_and_Feature_Subsets.ipynb`: log transformation of skewed features, and feature subsets compared with all 11 features.
-- `Rare_Wine_Weighting_oversampling.ipynb`: class weighting and oversampling for rare quality scores (3-4 and 8-9) on the four selected models, comparing overall error and rare wine error. Uses the same cleaning, split and tuned models as the main notebook.
+Cross-validation metrics are calculated from combined out-of-fold predictions. The RF regression/classification experiment also reports exact and within-one-score accuracy.
 
-## Reading the Outputs
+## Main Notebook
 
-Red and white calculations are kept separate, with combined tables and figures provided for comparison. Many individual calculation cells intentionally suppress output.
+**`Wine_Quality_Final.ipynb`**
 
-Section 9 contains the complete main-model comparison. The supplementary XGBoost results appear in Section 8.5.6.
+The notebook presents each experiment section by section:
+
+1. Data loading, cleaning and splitting.
+2. Shared preprocessing and evaluation rules.
+3. Four reference models.
+4. Reference-model comparison.
+5. Scaling experiments.
+6. Log-transformation experiments.
+7. Feature-subset experiments.
+8. Rare-score weighting and oversampling.
+9. RF regression versus classification.
+10. RF feature importance.
+11. Consolidated results and downloadable outputs.
+
+Each main experiment includes red-wine calculations, white-wine calculations, and comparison tables and graphs.
+
+## Running in Google Colab
+
+1. Upload `Wine_Quality_Final.ipynb` to Google Colab.
+2. Connect to a Python runtime.
+3. Check the configuration:
+
+   ```python
+   QUICK_MODE = False
+   RUN_HOLDOUT = True
+   RUN_RF_GRID_SEARCH = True
+   ```
+
+4. Select **Runtime → Run all**.
+5. Save the executed notebook.
+
+An internet connection is required to download the datasets unless local copies are available. Missing core packages are installed by the setup cell. Full execution, particularly RF grid searches and MLP experiments, can take considerable time.
+
+`QUICK_MODE = True` is intended only to check execution. Its results should not be used as final experimental evidence.
+
+## Outputs
+
+Results are saved in `wine_section_outputs/`, including:
+
+- Cross-validation and exploratory test metrics.
+- Out-of-fold and test predictions.
+- Per-quality-score errors.
+- Oversampling counts and duplication factors.
+- Fold-specific preprocessing information.
+- Comparison figures.
+- Software versions and experiment settings.
+
+The final cell creates `wine_section_outputs.zip` for download.
 
 ## Limitations
 
-- Rare quality scores have few test observations, so extreme-score findings should be interpreted cautiously.
-- Test results were inspected during development; comparisons are exploratory rather than a fresh confirmatory evaluation.
-- Cross-validation fold standard deviations do not establish statistical significance.
-- XGBoost’s round count is selected before its subsequent cross-validation, so that CV score does not independently evaluate its selection procedure.
-- Feature importance describes model behaviour and does not establish causal relationships.
-- Prediction accuracy is limited to the information available in the chemical measurements.
+- Rare extreme scores have few independent observations.
+- Oversampling repeats existing records rather than creating new information.
+- Improvements in rare-score error can come at the cost of overall accuracy.
+- Previously selected model settings make the CV comparisons conditional rather than nested evaluations of the complete selection process.
+- The test set was inspected during development, so holdout comparisons are exploratory.
+- Single-seed results and fold standard deviations do not establish statistical significance.
+- Feature importance describes model reliance and does not demonstrate causation.
 
 ## Research Reference
 
 Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). Modeling wine preferences by data mining from physicochemical properties. *Decision Support Systems, 47*(4), 547–553. https://doi.org/10.1016/j.dss.2009.05.016
 
-The article motivates the wine-quality regression problem. Our model configurations and evaluation procedure differ from the original study.
+The article supports the wine-quality regression problem. Our implementations and evaluation procedure differ from the original study. Additional method references are provided in the notebook and report.
 
+## Contributors
 
-
+Group FT13: Yong Le, Jae Hyun, Ian, Jiachen, Jing Ting and Sherya.
