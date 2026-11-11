@@ -1,4 +1,4 @@
-# Wine Quality Modelling and Preprocessing Experiments
+# Wine Quality Prediction: Effects of Preprocessing and Imbalance Handling Across Four Regression Models
 
 **CSCI323 Modern AI — Group FT13**
 
