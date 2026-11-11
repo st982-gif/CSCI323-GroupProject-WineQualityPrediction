@@ -83,7 +83,7 @@ Each main experiment includes red-wine calculations, white-wine calculations, an
 
 **`Red_White_Wine_Quality_Modelling_Comparisons.ipynb`**
 
-This earlier notebook contains the baseline models and hyperparameter searches (Random Forest grid search, KNN grid search and MLP architecture comparison) that produced the selected settings used in the main notebook. The baseline and selected-configuration results in Sections 3.2 and 3.3.1 of the report come from this notebook.
+This earlier notebook contains the baseline models and hyperparameter searches (Random Forest grid search, KNN grid search and MLP architecture comparison) that produced the selected settings used in the main notebook. The selected reference configurations in Table 2 of the report come from these searches.
 
 ## Running in Google Colab
 
