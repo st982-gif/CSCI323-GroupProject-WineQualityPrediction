@@ -79,6 +79,12 @@ The notebook presents each experiment section by section:
 
 Each main experiment includes red-wine calculations, white-wine calculations, and comparison tables and graphs.
 
+## Baseline and Tuning Notebook
+
+**`Red_White_Wine_Quality_Modelling_Comparisons.ipynb`**
+
+This earlier notebook contains the baseline models and hyperparameter searches (Random Forest grid search, KNN grid search and MLP architecture comparison) that produced the selected settings used in the main notebook. The baseline and selected-configuration results in Sections 3.2 and 3.3.1 of the report come from this notebook.
+
 ## Running in Google Colab
 
 1. Upload `Wine_Quality_Final.ipynb` to Google Colab.
@@ -130,4 +136,4 @@ The article supports the wine-quality regression problem. Our implementations an
 
 ## Contributors
 
-Group FT13: Yong Le, Jae Hyun, Ian, Jiachen, Jing Ting and Sherya.
+Group FT13: Yong Le, Jae Hyun, Ian, Jiachen, Jing Ting and Shreya.
